@@ -1,0 +1,22 @@
+section {
+  text-align: center;
+}
+.game--container {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  width: 306px;
+  margin: 50px auto;
+  align-items: center;
+  justify-content: center;
+}
+.ceil {
+  height: 150px;
+  width: 150px;
+  border: solid 1px black;
+  cursor: pointer;
+}
+.btn-restart {
+  padding: 10px;
+  background-color: green;
+  cursor: pointer;
+}
