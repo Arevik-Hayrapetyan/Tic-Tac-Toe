@@ -1,48 +1,33 @@
 let message = document.querySelector(".message");
-let gameActive = true;
-let currentPlayer = "X";
-let gameState = ["", "", "", "", "", "", "", "", ""];
-
-const winningMessage = () => {
-  return `Player ${currentPlayer} has won!`;
-};
-const drawMessage = () => {
-  return `Game ended in a draw!`;
-};
-const currentPlayerTurn = () => {
-  return `It's ${currentPlayer}'s turn`;
-};
-message.innerHTML = currentPlayerTurn();
-function handleCellPlayed() {}
-function handlePlayerChange() {}
-
-// function handleCellClick() {}
-
-function handleRestartGame() {}
-
-document.querySelectorAll(".ceil").forEach((el) => {
-  return el.addEventListener("click", handleCeilClick);
-});
+// eventListeners
 document
   .querySelector(".btn-restart")
   .addEventListener("click", handleRestartGame);
+document.querySelectorAll(".ceil").forEach((el) => {
+  return el.addEventListener("click", handleCeilClick);
+});
+
+let gameActive = true;
+let gameArray = ["", "", "", "", "", "", "", "", ""];
+let currentPlayer = "X";
+
+const winMessage = () => {
+  return `Winner is ${currentPlayer}`;
+};
+const noWinMessage = () => {
+  return `No winner`;
+};
+const currentPlayerTurn = () => {
+  return `It is ${currentPlayer} turn`;
+};
+message.innerHTML = currentPlayerTurn();
 
 function handleCeilClick(event) {
   let clickedCeil = event.target;
   let clickedCeilIndex = parseInt(clickedCeil.getAttribute("data-cell-index"));
-  if (gameState[clickedCeilIndex] !== "" || !gameActive) {
-    return;
-  }
-  handleCeilPlayed(clickedCeil, clickedCeilIndex);
-  handleResultValidation();
-}
-
-function handleCeilPlayed(clickedCeil, clickedCeilIndex) {
-  gameState[clickedCeilIndex] = currentPlayer;
+  gameArray[clickedCeilIndex] = currentPlayer;
   clickedCeil.innerHTML = currentPlayer;
-}
 
-function handleResultValidation() {
   let winningCases = [
     [0, 1, 2],
     [3, 4, 5],
@@ -53,42 +38,38 @@ function handleResultValidation() {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  let win = false;
+  let winner = false;
   for (let i = 0; i <= 7; i++) {
     let winCondition = winningCases[i];
-    let a = gameState[winCondition[0]];
-    let b = gameState[winCondition[1]];
-    let c = gameState[winCondition[2]];
-    if (a === "" || b === "" || c === "") {
+    let case1 = gameArray[winCondition[0]]; //X
+    let case2 = gameArray[winCondition[1]]; //O
+    let case3 = gameArray[winCondition[2]]; //X
+
+    if (case1 === "" || case2 === "" || case3 === "") {
       continue;
     }
-    if (a === b && b === c) {
-      win = true;
+    if (case1 === case2 && case2 === case3) {
+      winner = true;
       break;
     }
   }
-  if (win) {
-    message.innerHTML = winningMessage();
+  if (winner) {
+    message.innerHTML = winMessage();
     gameActive = false;
     return;
   }
-  let roundDraw = !gameState.includes("");
-  if (roundDraw) {
-    message.innerHTML = drawMessage();
+  if (!gameArray.includes("")) {
+    message.innerHTML = noWinMessage();
     gameActive = false;
     return;
   }
-  handlePlayerChange();
-}
-function handlePlayerChange() {
   currentPlayer = currentPlayer === "X" ? "O" : "X";
   message.innerHTML = currentPlayerTurn();
 }
-
 function handleRestartGame() {
-  let gameState = ["", "", "", "", "", "", "", "", ""];
-  gameActive = true;
+  gameArray = ["", "", "", "", "", "", "", "", ""];
   currentPlayer = "X";
+  gameActive = true;
   message.innerHTML = currentPlayerTurn();
-  document.querySelectorAll(".cell").forEach((cell) => (cell.innerHTML = ""));
+  document.querySelectorAll(".ceil").forEach((ceil) => (ceil.innerHTML = ""));
 }
